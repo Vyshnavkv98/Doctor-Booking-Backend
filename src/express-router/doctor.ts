@@ -13,7 +13,9 @@ router.post("/logout",doctorController.logout)
 router.post("/logoutAll",doctorController.logoutAll)
 router.post("/verifydata",doctorController.doctorVerification)
 router.post("/add-slots",doctorController.addAvailableSlots)
-router.get("/get-slots",doctorController.getAvailableSlots)
+router.post("/add-videoslots",doctorController.addVideoAvailableSlots)
+router.post("/get-slots",doctorController.getAvailableSlots)
+router.get("/doctor-details",doctorController.getDoctor)
 router.get("/get-departments",doctorController.getAllDepartment)
 
 export default router

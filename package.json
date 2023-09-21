@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.388.0",
+    "@types/socket.io": "^3.0.2",
     "aws-sdk": "^2.1079.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
@@ -42,6 +43,7 @@
     "node-cache": "^5.1.2",
     "nodemailer": "^6.9.4",
     "sib-api-v3-sdk": "^8.5.0",
+    "socket.io": "^4.7.2",
     "stripe": "^13.5.0",
     "universal-cookie": "^4.0.4",
     "uuidv4": "^6.2.13",

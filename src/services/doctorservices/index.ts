@@ -42,11 +42,11 @@ type doctorCache = {
     registerNumber: string,
     imgUrl: string,
     image: string,
-    AddressLine1:string,
-    AddressLine2:string,
-    offline:boolean,
-    chat:boolean,
-    video:boolean
+    AddressLine1: string,
+    AddressLine2: string,
+    offline: boolean,
+    chat: boolean,
+    video: boolean
 }
 
 
@@ -191,14 +191,14 @@ class doctorServices {
                 if (dateExists) {
                     if (slotDetails) {
                         const indexToUpdate = slotDetails.AvailableSlots?.findIndex(
-                            (slot) => slot.date === slotData.formattedDate 
+                            (slot) => slot.date === slotData.formattedDate
                         );
                         console.log(indexToUpdate);
-                            
-                        if (indexToUpdate !==undefined) {
+
+                        if (indexToUpdate !== undefined) {
                             const updatedData = await doctorRepository.updateSlot(slotData, indexToUpdate)
-                            
-                            
+
+
 
                             return updatedData
                         }
@@ -210,12 +210,53 @@ class doctorServices {
             }
         }
     }
+    addVideoConsultationSlots = async (slotData: ISlotInterface) => {
+        if (!slotData.formattedDate) {
+            throw new badRequestError('Please select the date')
+        }
+        else {
+            const slotDetails = await doctorRepository.findVideoConsultationSlotDetails(slotData)
+            const slots = slotDetails?.videoConsultationSlots as any
 
-    getSlots=async(id:string)=>{
-        const doctor=await doctorRepository.getDoctorSlots(id)
+            if (slots.length >0) {
+                const dateExists = slots.some((item: any) => item.date === slotData?.formattedDate);
+
+                if (dateExists) {
+                    if (slotDetails) {
+
+                        const indexToUpdate = slotDetails?.videoConsultationSlots?.findIndex(
+                            (slot) => slot.date === slotData.formattedDate
+                        );
+
+                        if (indexToUpdate !== undefined) {
+                            const updatedData = await doctorRepository.updateVideoConsultationSlot(slotData, indexToUpdate)
+
+
+
+                            return updatedData
+                        }
+                    }
+                } else {
+                    const updatedSlotData = await doctorRepository.addNewVideoConsultationSlot(slotData)
+                    return updatedSlotData
+                }
+            }
+        }
+    }
+
+    getSlots = async (id: string) => {
+        const doctor = await doctorRepository.getDoctorSlots(id)
         if (!doctor) throw new NotFoundError("Could Not Find doctor");
-        else{
-           return doctor?.AvailableSlots
+        else {
+            return doctor?.AvailableSlots
+        }
+
+    }
+    getDoctordata = async (id: string) => {
+        const doctor = await doctorRepository.getDoctorSlots(id)
+        if (!doctor) throw new NotFoundError("Could Not Find doctor");
+        else {
+            return doctor
         }
 
     }

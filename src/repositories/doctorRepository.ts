@@ -17,7 +17,6 @@ class DoctorRepository {
 
 
   async getDoctorServices(userId: String) {
-    console.log(userId);
 
     const doctors = await Doctor.findById(userId);
     if (!doctors) throw new NotFoundError("Could Not Find doctor");
@@ -58,10 +57,31 @@ class DoctorRepository {
       return slotDetails
     }
   }
+  async findVideoConsultationSlotDetails(slotData: ISlotInterface) {
+    const slotDetails = await Doctor.findById(slotData?.doctorId)
+    if (!slotDetails) {
+      throw new NotFoundError("Could Not Find doctor");
+    }
+    else {
+      return slotDetails
+    }
+  }
 
   async updateSlot(slotData: ISlotInterface, indexToUpdate: number) {
-    console.log(slotData, '44 doc repo');
-    const slots = slotData.timeSlots
+    const slots = slotData.timeSlotsVideo
+    const doctorData = await Doctor.findById(slotData.doctorId)
+    if (doctorData?.AvailableSlots) {
+      doctorData.AvailableSlots[indexToUpdate].slots = slots;
+      const updatedDoctor = await doctorData.save();
+      return updatedDoctor;
+    } else {
+      throw new Error(`Doctor with ID ${slotData.doctorId} not found or AvailableSlots is undefined.`);
+    }
+
+
+  }
+  async updateVideoConsultationSlot(slotData: ISlotInterface, indexToUpdate: number) {
+    const slots = slotData.timeSlotsVideo
     const doctorData = await Doctor.findById(slotData.doctorId)
     if (doctorData?.AvailableSlots) {
       doctorData.AvailableSlots[indexToUpdate].slots = slots;
@@ -81,7 +101,26 @@ class DoctorRepository {
 
     // Push the new slot data into the AvailableSlots array
     if (updatedSlots !== undefined) {
-      updatedSlots.AvailableSlots?.push({ date: slotData.formattedDate, slots: slotData.timeSlots })
+      updatedSlots.AvailableSlots?.push({ date: slotData.formattedDate, slots: slotData.timeSlotsVideo })
+    }
+
+    // Save the updated doctor document
+    const updatedDoctor = await updatedSlots.save();
+
+    return updatedDoctor;
+  }
+  async addNewVideoConsultationSlot(slotData: ISlotInterface) {
+    const updatedSlots = await Doctor.findById(slotData?.doctorId)
+    console.log(updatedSlots);
+    
+    if (!updatedSlots) {
+      throw new Error(`Doctor with ID ${slotData?.doctorId} not found.`);
+    }
+
+    // Push the new slot data into the AvailableSlots array
+    if (updatedSlots !== undefined) {
+      console.log(slotData,'from add')
+      updatedSlots.videoConsultationSlots?.push({ date: slotData.formattedDate, slots: slotData.timeSlotsVideo })
     }
 
     // Save the updated doctor document

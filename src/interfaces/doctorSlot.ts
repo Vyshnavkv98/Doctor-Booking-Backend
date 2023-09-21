@@ -2,7 +2,8 @@
 export interface ISlotInterface{
     doctorId:string,
     formattedDate:string,
-    timeSlots:string[]
+    timeSlotsVideo:string[]
+
 }
 
 export interface IPaymentInterface{

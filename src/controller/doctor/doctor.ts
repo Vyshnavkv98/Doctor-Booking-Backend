@@ -202,16 +202,43 @@ class doctorController {
                 res.status(code).send({ message: e.message });
             }
     }
+    addVideoAvailableSlots = async (req: RequestType, res: Response) => {
+            try {
+                const slotsAndDate=req.body
+                
+                const updatedSlotData=await doctorProvider.addVideoConsultationSlots(slotsAndDate)
+                
+                res.status(201).send({slotData:updatedSlotData, message: "Slots selected successfully" });
+
+                
+            } catch (e:any) {
+                console.log("\n doctor add Slot Doctor Route Error:", e.message);
+                const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+                res.status(code).send({ message: e.message });
+            }
+    }
     getAvailableSlots= async (req: RequestType, res: Response) => {
+
+        try {
+            const {doctorId}=req.body
+            const slotsData=await doctorProvider.getSlots(doctorId)
+            
+            res.status(200).send({slotsData:slotsData,message:'slot data'})
+        } catch (e:any) {
+            console.log("\n doctor get Slot Doctor Route Error:", e.message);
+            const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+            res.status(code).send({ message: e.message });
+        }
+    }
+    getDoctor= async (req: RequestType, res: Response) => {
 
         try {
             const {doctorId}=req.body
             console.log(doctorId,'yyyy');
             
-            const slotsData=await doctorProvider.getSlots(doctorId)
-            console.log(slotsData,'from controller get');
+            const doctorData=await doctorProvider.getDoctordata(doctorId)
             
-            res.status(200).send({slotsData:slotsData,message:'slot data'})
+            res.status(200).send({doctorData:doctorData,message:'slot data'})
         } catch (e:any) {
             console.log("\n doctor get Slot Doctor Route Error:", e.message);
             const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
