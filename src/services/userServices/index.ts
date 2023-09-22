@@ -79,7 +79,7 @@ class userServices {
         console.log(genOtp, otp);
         const isRegistered = await userRepository.isExist(email)
 
-        if (isRegistered) {
+        if (isRegistered !== null) {
             throw new Error('Email already exist')
         }
 

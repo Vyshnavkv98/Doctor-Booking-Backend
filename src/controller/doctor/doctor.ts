@@ -159,7 +159,6 @@ class doctorController {
 
             await doctorProvider.logoutAll(userid);
 
-            //  createLogoutCookie(res);
 
             res.status(204).send();
 
@@ -176,7 +175,6 @@ class doctorController {
         try {
             const doctorData = req.body
             const docData = await doctorProvider.verification(doctorData);
-            console.log(doctorData, 'controller');
 
             res.status(201).send({ doctor: docData, message: "Doctor verification data uploaded successfully" });
 
@@ -189,7 +187,6 @@ class doctorController {
     addAvailableSlots = async (req: RequestType, res: Response) => {
             try {
                 const slotsAndDate=req.body
-                console.log(slotsAndDate);
                 
                 const updatedSlotData=await doctorProvider.addSlots(slotsAndDate)
                 
@@ -234,7 +231,6 @@ class doctorController {
 
         try {
             const {doctorId}=req.body
-            console.log(doctorId,'yyyy');
             
             const doctorData=await doctorProvider.getDoctordata(doctorId)
             
@@ -257,6 +253,33 @@ class doctorController {
             res.status(code).send({ message: e.meesage })
         }
 
+    }
+
+    getAppointments=async(req:RequestType,res:Response)=>{
+      try {
+        const appointmentDetails=await doctorProvider.getAppointments()
+        if(!appointmentDetails) throw new  NotFoundError('appointments not found')
+        res.status(200).send({appointments:appointmentDetails})
+        
+      } catch (e:any) {
+        console.log("\n getappointment All Doctor Route Error:", e.message);
+        const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+        res.status(code).send({ message: e.meesage })
+      }
+    }
+    confirmAppointment=async(req:RequestType,res:Response)=>{
+      try {
+        console.log(req.body);
+        
+        const appointmentConfrim=await doctorProvider.confirmAppointment(req.body)
+        if(!appointmentConfrim) throw new  NotFoundError('appointments not found')
+        res.status(200).send({appointments:appointmentConfrim,confirmationStatus:'true'})
+        
+      } catch (e:any) {
+        console.log("\n getappointment All Doctor Route Error:", e.message);
+        const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+        res.status(code).send({ message: e.meesage })
+      }
     }
 
 

@@ -3,9 +3,10 @@ import { Doctor } from "../models/doctorModel";
 import NotFoundError from "../utils/notFoundError";
 import { useStderr } from "../../jest.config";
 import { doctorCache } from '../interfaces/doctorCache'
-import { ISlotInterface } from "../interfaces/doctorSlot";
+import { ISlotInterface, IStatusType } from "../interfaces/doctorSlot";
 import { Department } from "../models/departments";
 import InternalServerError from "../utils/InternalServerError";
+import { Appointment } from "../models/appointments";
 
 
 
@@ -138,6 +139,24 @@ class DoctorRepository {
     const departments=await Department.find()
     if(!departments) throw new InternalServerError('internal server error for getting department data')
     return departments
+}
+
+async getAllVideoAppointments(){
+  const departments=await Appointment.find({consultationMode:'videocall'})
+    if(!departments) throw new InternalServerError('internal server error for getting Appointment data')
+    return departments 
+
+}
+async appointmentConfirm(status:IStatusType){
+  
+  
+  const updatedAppointment=await Appointment.findByIdAndUpdate(status.id,{
+    status:status?.status
+  },{new:true})
+  console.log(updatedAppointment, 'from repoo');
+    if(!updatedAppointment) throw new InternalServerError('internal server error for getting Appointment data')
+    return updatedAppointment 
+
 }
 
 

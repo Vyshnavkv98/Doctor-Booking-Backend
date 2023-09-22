@@ -17,5 +17,8 @@ router.post("/add-videoslots",doctorController.addVideoAvailableSlots)
 router.post("/get-slots",doctorController.getAvailableSlots)
 router.get("/doctor-details",doctorController.getDoctor)
 router.get("/get-departments",doctorController.getAllDepartment)
+router.get("/get-appointments",doctorController.getAppointments)
+router.post("/confirm-video-consultation-appointment",doctorController.confirmAppointment)
+
 
 export default router

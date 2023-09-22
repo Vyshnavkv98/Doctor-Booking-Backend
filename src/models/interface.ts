@@ -104,7 +104,8 @@ export interface IAppointmentDataType {
     userId: string,
     doctorId: string,
     doctorFee: number,
-    payment: string
+    payment: string,
+    video?:string
 
 
 

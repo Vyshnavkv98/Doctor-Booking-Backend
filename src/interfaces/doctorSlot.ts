@@ -11,3 +11,8 @@ export interface IPaymentInterface{
    RegisterFee:number,
    
 }
+
+export interface IStatusType{
+    status:string,
+    id:string
+}

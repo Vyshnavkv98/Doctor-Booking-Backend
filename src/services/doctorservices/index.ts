@@ -8,6 +8,7 @@ import NodeCache = require("node-cache");
 import DoctorRepository from "../../repositories/doctorRepository";
 import { Doctor } from '../../models/doctorModel'
 import { ISlotInterface } from '../../interfaces/doctorSlot'
+import { IStatusType } from '../../interfaces/doctorSlot'
 import badRequestError from "../../utils/badRequestError";
 import { number } from "zod";
 import { strict } from "assert";
@@ -264,6 +265,14 @@ class doctorServices {
         const departmentDetails = await doctorRepository.getDepartments()
 
         if (departmentDetails) return departmentDetails
+    }
+    getAppointments=async()=>{
+      const appointmentDetails=await doctorRepository.getAllVideoAppointments()
+      if (appointmentDetails) return appointmentDetails
+    }
+    confirmAppointment=async(status:IStatusType)=>{
+      const appointmentDetails=await doctorRepository.appointmentConfirm(status)
+      if (appointmentDetails) return appointmentDetails
     }
 }
 export default doctorServices;

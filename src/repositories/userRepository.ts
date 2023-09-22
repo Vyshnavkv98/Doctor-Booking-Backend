@@ -29,7 +29,9 @@ class UserRepository {
     }
 
     async isExist(email: string) {
-        const isREgister = await User.find({ email: email })
+        const isREgister = await User.findOne({ email: email })
+        console.log(isREgister);
+        
         return isREgister
     }
     async getDoctors() {
@@ -39,9 +41,11 @@ class UserRepository {
 
     async addOfflineAppointmentData(appointmentData:IAppointmentDataType){
 
-        const{name,email,reason,fee,mobile,date,time,userId,doctorId,doctorFee}=appointmentData
-        
-        const addedAppointment= new Appointment({
+        const{name,email,reason,fee,mobile,date,time,userId,doctorId,doctorFee,video}=appointmentData
+        console.log(appointmentData)
+let addedAppointment
+if(!video){        
+         addedAppointment= new Appointment({
             user:userId,
             doctor:doctorId,
             name,
@@ -54,6 +58,21 @@ class UserRepository {
             payment:'pending',
             consultationMode:'offline'
         })
+    }else{
+        addedAppointment= new Appointment({
+            user:userId,
+            doctor:doctorId,
+            name,
+            email,
+            mobile,
+            fee,
+            date,
+            reason,
+            time,
+            payment:'pending',
+            consultationMode:'videocall'
+        })
+    }
         await addedAppointment.save()
         if(addedAppointment) return addedAppointment
         else throw new Error('Add appointment failed')
