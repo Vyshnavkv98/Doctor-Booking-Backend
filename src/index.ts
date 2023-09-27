@@ -10,8 +10,14 @@ const server=app.listen(port, () => {
 });
 
 const io = new Server(server, { cors: true });
+const emailToSocketId=new Map()
+const socketIdToEmail=new Map()
 
 io.on('connection', (socket:Socket)=>{
   console.log('socket connected',socket.id);
-  
+  socket.on('Room:join',(data)=>{
+    const{email,room}=data
+      emailToSocketId.set(email,socket.id)
+      socketIdToEmail.set(socket.id,email)
+  })
 })

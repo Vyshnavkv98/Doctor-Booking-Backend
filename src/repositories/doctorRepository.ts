@@ -142,7 +142,7 @@ class DoctorRepository {
 }
 
 async getAllVideoAppointments(){
-  const departments=await Appointment.find({consultationMode:'videocall'})
+  const departments=await ( Appointment.find({consultationMode:'videocall'}).sort({createdAt:-1}))
     if(!departments) throw new InternalServerError('internal server error for getting Appointment data')
     return departments 
 
