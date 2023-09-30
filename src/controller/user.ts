@@ -44,11 +44,7 @@ class UserController {
         try {
 
             await userProvider.createUser(req.body);
-
             res.status(201).send("register successful");
-
-
-
 
         } catch (e: any) {
 
