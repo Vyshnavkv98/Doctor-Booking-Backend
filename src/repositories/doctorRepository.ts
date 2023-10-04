@@ -3,7 +3,7 @@ import { Doctor } from "../models/doctorModel";
 import NotFoundError from "../utils/notFoundError";
 import { useStderr } from "../../jest.config";
 import { doctorCache } from '../interfaces/doctorCache'
-import { ISlotInterface, IStatusType } from "../interfaces/doctorSlot";
+import {  ISlotInterface, IStatusType, PrescriptionData,  } from "../interfaces/doctorSlot";
 import { Department } from "../models/departments";
 import InternalServerError from "../utils/InternalServerError";
 import { Appointment } from "../models/appointments";
@@ -157,6 +157,36 @@ async appointmentConfirm(status:IStatusType){
     if(!updatedAppointment) throw new InternalServerError('internal server error for getting Appointment data')
     return updatedAppointment 
 
+}
+async updateVideoAppointmentComplete(id:string){
+  
+  
+  const updatedAppointment=await Appointment.findByIdAndUpdate(id,{
+   status:'completed'
+  },{new:true})
+  console.log(updatedAppointment, 'from repoo');
+    if(!updatedAppointment) throw new InternalServerError('internal server error for getting Appointment data')
+    return updatedAppointment 
+
+}
+
+async addPresctionData(prescriptionData:PrescriptionData){
+  console.log(prescriptionData,'from repoooooooo presc');
+  const updatedData = [[
+   prescriptionData?.allPrescription ,
+   ],
+    {
+    PrescriptionType: prescriptionData?.prescription ,
+    }
+  ]
+  console.log(updatedData,'update');
+  
+
+
+  const updatedAppointment=await Appointment.findByIdAndUpdate(prescriptionData.id,
+    updatedData
+ ,{new:true} )
+  return updatedAppointment
 }
 
 

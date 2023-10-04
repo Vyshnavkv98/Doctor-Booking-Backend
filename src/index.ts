@@ -38,18 +38,18 @@ io.on('connection', (socket: Socket) => {
     io.to(to).emit('peer:nego:final', { from: socket.id, answer })
   })
 
-  // socket.on("socket:disconnect", ({ socketId }) => {
-  //   // Handle socket disconnection
-  //   const email = socketIdToEmail.get(socketId);
-  //   if (email) {
-  //     emailToSocketId.delete(email);
-  //     socketIdToEmail.delete(socketId);
-  //   }
+  socket.on("socket:disconnect", ({ socketId }) => {
+    // Handle socket disconnection
+    const email = socketIdToEmail.get(socketId);
+    if (email) {
+      emailToSocketId.delete(email);
+      socketIdToEmail.delete(socketId);
+    }
 
-  //   const targetSocket = io.sockets.sockets.get(socketId);
-  //   if (targetSocket) {
-  //     targetSocket.disconnect();
-  //   }
-  // })
+    const targetSocket = io.sockets.sockets.get(socketId);
+    if (targetSocket) {
+      targetSocket.disconnect();
+    }
+  })
     
 })

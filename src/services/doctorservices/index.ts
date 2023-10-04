@@ -2,12 +2,12 @@
 import NotFoundError from "../../utils/notFoundError";
 import env from "../../environment/env";
 import jwt from "jsonwebtoken";
-import { IDoctorModelInterface } from "../../models/interface";
+import { IAppointmentDataType, IDoctorModelInterface } from "../../models/interface";
 import sendMailVerification from "../../utils/sendMailVerification";
 import NodeCache = require("node-cache");
 import DoctorRepository from "../../repositories/doctorRepository";
 import { Doctor } from '../../models/doctorModel'
-import { ISlotInterface } from '../../interfaces/doctorSlot'
+import {  ISlotInterface, PrescriptionData } from '../../interfaces/doctorSlot'
 import { IStatusType } from '../../interfaces/doctorSlot'
 import badRequestError from "../../utils/badRequestError";
 import { number } from "zod";
@@ -273,6 +273,15 @@ class doctorServices {
     confirmAppointment=async(status:IStatusType)=>{
       const appointmentDetails=await doctorRepository.appointmentConfirm(status)
       if (appointmentDetails) return appointmentDetails
+    }
+    completeAppointment=async(id:string)=>{
+      const appointmentDetails=await doctorRepository.updateVideoAppointmentComplete(id)
+      if (appointmentDetails) return appointmentDetails
+    }
+    addPrescription=async(presctionData:PrescriptionData) =>{
+        const appointmentDataAfterPrescription=await doctorRepository.addPresctionData(presctionData)
+      if (appointmentDataAfterPrescription) return appointmentDataAfterPrescription
+      
     }
 }
 export default doctorServices;

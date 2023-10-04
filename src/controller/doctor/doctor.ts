@@ -281,6 +281,33 @@ class doctorController {
         res.status(code).send({ message: e.meesage })
       }
     }
+    completeAppointment=async(req:RequestType,res:Response)=>{
+      try {
+         const{id}=req.body
+        const appointmentComplete=await doctorProvider.completeAppointment(id)
+        if(!appointmentComplete) throw new  NotFoundError('appointments not found')
+        res.status(200).send({message:'videoConsultationCompleted'})
+        
+      } catch (e:any) {
+        console.log("\n getappointment All Doctor Route Error:", e.message);
+        const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+        res.status(code).send({ message: e.meesage })
+      }
+    }
+
+    addPrescription=async(req:RequestType,res:Response)=>{
+        try {
+            const appointmentData=await doctorProvider.addPrescription(req.body)
+            if(!appointmentData) throw new  NotFoundError('appointments not found')
+            res.status(200).send({message:'prescription added successfully',appointment:appointmentData})
+        } catch (e:any) {
+            console.log("\n addPrescription All Doctor Route Error:", e.message);
+            const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+            res.status(code).send({ message: e.meesage })
+        }
+    }
+
+    
 
 
 }

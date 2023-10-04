@@ -49,15 +49,19 @@ const appointmentSchema = new mongoose.Schema({
     payment: {
         type: String
     },
-    prescription: [
-        {
-            medicine: {
-                type: String
-            },
-            timing: {
-                type: String
-            }
-        }
+    prescription:[[{
+        medicationName:String,
+        dosage:String,
+        frequency:String,
+        instructions:String,
+      }],
+      {
+        diagnosisdiagnosis:String,
+        notesnotes:String,
+        nextAppointment:String,
+      }
+    
+      
     ],
     consultationMode:{
         type:String,

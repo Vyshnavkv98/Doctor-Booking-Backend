@@ -43,17 +43,7 @@ export interface IDoctorModelInterface extends Document {
     chat: boolean,
     offline: boolean,
     video: boolean,
-    prescription:[[{
-        medicationName:string,
-        dosage:string,
-        frequency:string,
-        instructions:string,
-    }],{
-        diagnosisdiagnosis:string,
-        notesnotes:string,
-        nextAppointment:string,
-    }
-]
+    
     getEncryptionKey: () => Buffer | undefined,
     findByCreds: (email: string, password: string) => Promise<IDoctorModelInterface>,
     generateTempAuthToken: () => Promise<any>,
@@ -96,7 +86,17 @@ export interface IAppointmentInterface {
     fee: number,
     note: string,
     reason: string,
-    prescription: PrescriptionItem[],
+    prescription:[[{
+        medicationName:string,
+        dosage:string,
+        frequency:string,
+        instructions:string,
+    }],{
+        diagnosisdiagnosis:string,
+        notesnotes:string,
+        nextAppointment:string,
+    }
+],
     date: string,
     time: string,
     isAttended: boolean,

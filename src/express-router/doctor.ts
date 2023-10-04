@@ -19,6 +19,8 @@ router.get("/doctor-details",doctorController.getDoctor)
 router.get("/get-departments",doctorController.getAllDepartment)
 router.get("/get-appointments",doctorController.getAppointments)
 router.post("/confirm-video-consultation-appointment",doctorController.confirmAppointment)
+router.patch('/video-appointment-finished',doctorController.completeAppointment)
+router.post('/add-prescription',doctorController.addPrescription)
 
 
 export default router
