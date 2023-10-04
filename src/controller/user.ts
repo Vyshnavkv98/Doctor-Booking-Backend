@@ -214,17 +214,17 @@ class UserController {
     confirmOfflineAppointment = async (req: RequestType, res: Response) => {
         try {
             const appointmentData = req.body
-        if (!appointmentData) throw new NotFoundError("Resource not found");
+            if (!appointmentData) throw new NotFoundError("Resource not found");
 
-        const updatedAppointment = await userProvider.offlineAppointmentConfirm(appointmentData)
+            const updatedAppointment = await userProvider.offlineAppointmentConfirm(appointmentData)
 
-        if (updatedAppointment) {
-            res.status(201).send({ appointmentData: updatedAppointment, message: 'Appointment Added successfully' })
-        }
-        } catch (e:any) {
+            if (updatedAppointment) {
+                res.status(201).send({ appointmentData: updatedAppointment, message: 'Appointment Added successfully' })
+            }
+        } catch (e: any) {
             console.log("\nappointment User Route Error:", e.message);
             const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
-            res.status(code).send({message:e.meesage})
+            res.status(code).send({ message: e.meesage })
         }
 
 
@@ -276,11 +276,11 @@ class UserController {
         // Return a 200 response to acknowledge receipt of the event
         res.send({ message: 'Payment successfull' });
     }
-    getAllDepartment = async (req:RequestType, res: Response) => {
+    getAllDepartment = async (req: RequestType, res: Response) => {
         try {
             const departmentData = await userProvider.getDepartments()
-            if(!departmentData) throw new  NotFoundError('departments not found')
-            res.status(200).send({departments:departmentData})
+            if (!departmentData) throw new NotFoundError('departments not found')
+            res.status(200).send({ departments: departmentData })
 
         } catch (e: any) {
             console.log("\nLogout All User Route Error:", e.message);
@@ -289,7 +289,26 @@ class UserController {
         }
 
     }
-   
+
+    cancelAppointment = async (req: RequestType, res: Response) => {
+        try {
+
+            const { appointmentId } = req.body
+            console.log(req.body, 'cancel appoiiii');
+
+            if (!appointmentId) throw new Error('cannot find appointment details')
+            const appointmentData = await userProvider.cancelDoctorAppointment(appointmentId)
+            if (appointmentData) {
+                res.status(201).send({ message: 'Appointment canceled', appointmentData: appointmentData })
+            } else throw new NotFoundError('some issue with cancel appointment')
+
+        } catch (e: any) {
+            console.log("\ncancel appintment Route Error:", e.message);
+            const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+            res.status(code).send({ message: e.meesage })
+        }
+    }
+
 }
 
 export default UserController;

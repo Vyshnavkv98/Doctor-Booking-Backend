@@ -136,6 +136,20 @@ const doctorSchema = new mongoose.Schema({
     default:false
     
   },
+  prescription:[[{
+    medicationName:String,
+    dosage:String,
+    frequency:String,
+    instructions:String,
+  }],
+  {
+    diagnosisdiagnosis:String,
+    notesnotes:String,
+    nextAppointment:String,
+  }
+
+  
+]
 
 }, { timestamps: true });
 

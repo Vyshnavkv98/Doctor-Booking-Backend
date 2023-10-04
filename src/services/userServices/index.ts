@@ -189,5 +189,11 @@ class userServices {
         if (departmentDetails) return departmentDetails
     }
 
+    cancelDoctorAppointment=async(AppointmentId:string)=>{
+        const appointmentDetails=await userRepository.updateCancelAppointment(AppointmentId)
+        if (appointmentDetails) return appointmentDetails
+        else throw new InternalServerError('internal server error')
+    }
+
 }
 export default userServices;

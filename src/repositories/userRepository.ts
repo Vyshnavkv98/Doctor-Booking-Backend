@@ -85,6 +85,14 @@ if(!video){
         return departments
     }
 
+   async updateCancelAppointment(appointmentId:string){
+    const appointmentData=await Appointment.findByIdAndUpdate(appointmentId,{
+        status:'Cancelled'
+    })
+    if(appointmentData) return appointmentData
+    else throw new InternalServerError('internal server error for cancel appointment')
+   }
+
 }
 
 export default UserRepository

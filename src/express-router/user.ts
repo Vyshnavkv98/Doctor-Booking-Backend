@@ -23,6 +23,7 @@ router.post("/add-appointment",userController.confirmOfflineAppointment)
 router.post("/create-checkout-session",userController.paymentConfirm)
 router.post("/webhook", express.raw({type: 'application/json'}),userController.webhookControl)
 router.get("/get-alldepartments",userController.getAllDepartment)
+router.post("/cancel-appointment",userController.cancelAppointment)
 
 
 
