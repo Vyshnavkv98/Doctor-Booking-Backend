@@ -41,10 +41,10 @@ class UserRepository {
 
     async addOfflineAppointmentData(appointmentData:IAppointmentDataType){
 
-        const{name,email,reason,fee,mobile,date,time,userId,doctorId,doctorFee,video}=appointmentData
+        const{name,email,reason,fee,mobile,date,time,userId,doctorId,doctorFee,videoConsult}=appointmentData
         console.log(appointmentData)
 let addedAppointment
-if(!video){        
+if(!videoConsult){        
          addedAppointment= new Appointment({
             user:userId,
             doctor:doctorId,
@@ -84,6 +84,12 @@ if(!video){
         if(!departments) throw new InternalServerError('internal server error for getting department data')
         return departments
     }
+    async getAllVideoAppointments() {
+        const departments = await (Appointment.find({ consultationMode: 'offline' }).sort({ createdAt: -1 }))
+        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
+        return departments
+    
+      }
 
    async updateCancelAppointment(appointmentId:string){
     const appointmentData=await Appointment.findByIdAndUpdate(appointmentId,{

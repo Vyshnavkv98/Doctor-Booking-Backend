@@ -7,7 +7,7 @@ import sendMailVerification from "../../utils/sendMailVerification";
 import NodeCache = require("node-cache");
 import DoctorRepository from "../../repositories/doctorRepository";
 import { Doctor } from '../../models/doctorModel'
-import {  ISlotInterface, PrescriptionData } from '../../interfaces/doctorSlot'
+import {  ISlotInterface, ISlotOfflineInterface, PrescriptionData } from '../../interfaces/doctorSlot'
 import { IStatusType } from '../../interfaces/doctorSlot'
 import badRequestError from "../../utils/badRequestError";
 import { number } from "zod";
@@ -180,21 +180,27 @@ class doctorServices {
         return res
     }
 
-    addSlots = async (slotData: ISlotInterface) => {
+    addSlots = async (slotData: ISlotOfflineInterface) => {
+        console.log(slotData,'slotdata');
+        
         if (!slotData.formattedDate) {
             throw new badRequestError('Please select the date')
         }
         else {
             const slotDetails = await doctorRepository.findSlotDetails(slotData)
             const slots = slotDetails?.AvailableSlots as any
-            if (slots !== undefined) {
+            console.log(slots);
+            
+            if (slots !== undefined || null) {
                 const dateExists = slots.some((item: any) => item.date === slotData?.formattedDate);
+                console.log(dateExists);
+                
                 if (dateExists) {
                     if (slotDetails) {
                         const indexToUpdate = slotDetails.AvailableSlots?.findIndex(
                             (slot) => slot.date === slotData.formattedDate
                         );
-                        console.log(indexToUpdate);
+                        console.log(indexToUpdate,'indexToUpdate');
 
                         if (indexToUpdate !== undefined) {
                             const updatedData = await doctorRepository.updateSlot(slotData, indexToUpdate)
@@ -205,6 +211,8 @@ class doctorServices {
                         }
                     }
                 } else {
+                    console.log('exist');
+                    
                     const updatedSlotData = await doctorRepository.addNewSlot(slotData)
                     return updatedSlotData
                 }

@@ -289,6 +289,18 @@ class UserController {
         }
 
     }
+    getAppointments=async(req:RequestType,res:Response)=>{
+        try {
+          const appointmentDetails=await userProvider.getAppointments()
+          if(!appointmentDetails) throw new  NotFoundError('appointments not found')
+          res.status(200).send({appointments:appointmentDetails})
+          
+        } catch (e:any) {
+          console.log("\n getappointment All Doctor Route Error:", e.message);
+          const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+          res.status(code).send({ message: e.meesage })
+        }
+      }
 
     cancelAppointment = async (req: RequestType, res: Response) => {
         try {

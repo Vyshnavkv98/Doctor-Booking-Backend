@@ -188,6 +188,10 @@ class userServices {
 
         if (departmentDetails) return departmentDetails
     }
+    getAppointments=async()=>{
+        const appointmentDetails=await userRepository.getAllVideoAppointments()
+        if (appointmentDetails) return appointmentDetails
+      }
 
     cancelDoctorAppointment=async(AppointmentId:string)=>{
         const appointmentDetails=await userRepository.updateCancelAppointment(AppointmentId)

@@ -5,6 +5,12 @@ export interface ISlotInterface {
     timeSlotsVideo: string[]
 
 }
+export interface ISlotOfflineInterface {
+    doctorId: string,
+    formattedDate: string,
+    timeSlots: string[]
+
+}
 
 export interface IPaymentInterface {
     name: string,
@@ -31,7 +37,7 @@ export type PrescriptionType = {
   };
   
   export type PrescriptionData = {
-    prescription: PrescriptionType[];
-    allPrescription: DiagnosisType;
+    allPrescription: PrescriptionType[];
+    prescription: DiagnosisType;
     id:string
   };

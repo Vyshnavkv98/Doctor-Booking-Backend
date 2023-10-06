@@ -19,7 +19,7 @@ export interface IDoctorModelInterface extends Document {
         date: string;
         slots: string[];
     }],
-    videoConsultationSlots:[
+    videoConsultationSlots: [
         {
             date: string;
             slots: string[];
@@ -43,7 +43,7 @@ export interface IDoctorModelInterface extends Document {
     chat: boolean,
     offline: boolean,
     video: boolean,
-    
+
     getEncryptionKey: () => Buffer | undefined,
     findByCreds: (email: string, password: string) => Promise<IDoctorModelInterface>,
     generateTempAuthToken: () => Promise<any>,
@@ -86,17 +86,17 @@ export interface IAppointmentInterface {
     fee: number,
     note: string,
     reason: string,
-    prescription:[[{
-        medicationName:string,
-        dosage:string,
-        frequency:string,
-        instructions:string,
-    }],{
-        diagnosisdiagnosis:string,
-        notesnotes:string,
-        nextAppointment:string,
-    }
-],
+    prescription: [{
+        medicationName: string,
+        dosage: string,
+        frequency: string,
+        instructions: string,
+    }],
+    diagnosis: string,
+    prescriptionNotes: string,
+    nextAppointment: string,
+
+
     date: string,
     time: string,
     isAttended: boolean,
@@ -116,7 +116,8 @@ export interface IAppointmentDataType {
     doctorId: string,
     doctorFee: number,
     payment: string,
-    video?:string
+    video?: string,
+    videoConsult:string
 
 
 

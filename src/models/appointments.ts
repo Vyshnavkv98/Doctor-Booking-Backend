@@ -4,19 +4,19 @@ import { IAppointmentInterface } from "./interface";
 const appointmentSchema = new mongoose.Schema({
 
     user: {
-        type:mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
     doctor: {
-        type:mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'doctor'
     },
     notes: {
-        type:String,
+        type: String,
     },
     status: {
         type: String,
-        enum: ['Scheduled', 'Cancelled', 'Completed','confirmed'],
+        enum: ['Scheduled', 'Cancelled', 'Completed', 'confirmed'],
         default: 'Scheduled',
     },
     name: {
@@ -49,23 +49,19 @@ const appointmentSchema = new mongoose.Schema({
     payment: {
         type: String
     },
-    prescription:[[{
-        medicationName:String,
-        dosage:String,
-        frequency:String,
-        instructions:String,
-      }],
-      {
-        diagnosisdiagnosis:String,
-        notesnotes:String,
-        nextAppointment:String,
-      }
-    
-      
-    ],
-    consultationMode:{
-        type:String,
-        enum:['offline','videocall','text']
+    prescription: [{
+        medicationName: { type: String },
+        dosage: { type: String },
+        frequency: { type: String },
+        instructions: { type: String },
+    }],
+    diagnosis: { type: String },
+    prescriptionNotes: { type: String },
+    nextAppointment: { type: String },
+
+    consultationMode: {
+        type: String,
+        enum: ['offline', 'videocall', 'text']
     }
 
 }, { timestamps: true })
