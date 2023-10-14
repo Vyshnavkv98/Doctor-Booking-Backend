@@ -35,7 +35,7 @@ class UserRepository {
         return isREgister
     }
     async getDoctors() {
-        const doctors = await Doctor.find()
+        const doctors = await Doctor.find({video:true})
         return doctors
     }
 
