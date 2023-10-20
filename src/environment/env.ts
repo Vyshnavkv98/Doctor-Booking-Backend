@@ -16,7 +16,9 @@ export default {
     S3_REGION:process.env.S3_REGION,
     S3_BUCKET:process.env.S3_BUCKET,
     EMAIL:process.env.EMAIL,
-    PASSWORD:process.env.PASSWORD
+    PASSWORD:process.env.PASSWORD,
+    STRIPE:process.env.STRIPE,
+    ENDPOINT:process.env.ENDPOINT
 
 }
 
@@ -32,6 +34,8 @@ module.exports = {
     S3_REGION:process.env.S3_REGION,
     S3_BUCKET:process.env.S3_BUCKET,
     EMAIL:process.env.EMAIL,
-    PASSWORD:process.env.PASSWORD
+    PASSWORD:process.env.PASSWORD,
+    STRIPE:process.env.STRIPE,
+    ENDPOINT:process.env.ENDPOINT
 }
 

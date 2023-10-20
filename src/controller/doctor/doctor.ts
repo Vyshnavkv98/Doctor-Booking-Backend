@@ -202,10 +202,13 @@ class doctorController {
     addVideoAvailableSlots = async (req: RequestType, res: Response) => {
             try {
                 const slotsAndDate=req.body
+                console.log(req.body);
+                
                 
                 const updatedSlotData=await doctorProvider.addVideoConsultationSlots(slotsAndDate)
                 
-                res.status(201).send({slotData:updatedSlotData, message: "Slots selected successfully" });
+              if(updatedSlotData) res.status(201).send({slotData:updatedSlotData, message: "Slots selected successfully" });
+              else res.status(500).send({slotData:updatedSlotData, message: "internal server error" });
 
                 
             } catch (e:any) {
@@ -258,6 +261,18 @@ class doctorController {
     getAppointments=async(req:RequestType,res:Response)=>{
       try {
         const appointmentDetails=await doctorProvider.getAppointments()
+        if(!appointmentDetails) throw new  NotFoundError('appointments not found')
+        res.status(200).send({appointments:appointmentDetails})
+        
+      } catch (e:any) {
+        console.log("\n getappointment All Doctor Route Error:", e.message);
+        const code = !e.code ? 500 : e.code >= 400 && e.code <= 599 ? e.code : 500;
+        res.status(code).send({ message: e.meesage })
+      }
+    }
+    getAppointmentsCompleted=async(req:RequestType,res:Response)=>{
+      try {
+        const appointmentDetails=await doctorProvider.getAppointmentsCompleted()
         if(!appointmentDetails) throw new  NotFoundError('appointments not found')
         res.status(200).send({appointments:appointmentDetails})
         

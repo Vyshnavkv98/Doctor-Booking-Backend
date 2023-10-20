@@ -6,8 +6,9 @@ import NotFoundError from "../utils/notFoundError";
 import InternalServerError from "../utils/InternalServerError";
 import { randomUUID } from "crypto";
 import { error } from "console";
-const stripe = require('stripe')('sk_test_51Np894SEixsZ4knFgXnSgfwowqNNIFKweTSrkkfd5lFH4XYuVgWNkScisVzhbOmkToUIT00km3q32Uej3EvVNSTw00YVlxh9ls');
-const endpointSecret = "whsec_f2700ff9d76be75a2e19fc3ff20c83d878634d40b148e45ce89c77e87ff2ebbf";
+import env from "../environment/env";
+const stripe = require('stripe')(env.STRIPE);
+const endpointSecret = env.ENDPOINT;
 
 
 const userProvider = new userServices()

@@ -227,8 +227,9 @@ class doctorServices {
             const slotDetails = await doctorRepository.findVideoConsultationSlotDetails(slotData)
             const slots = slotDetails?.videoConsultationSlots as any
 
-            if (slots.length >0) {
+            if (slots.length >=0) {
                 const dateExists = slots.some((item: any) => item.date === slotData?.formattedDate);
+console.log(dateExists);
 
                 if (dateExists) {
                     if (slotDetails) {
@@ -276,6 +277,10 @@ class doctorServices {
     }
     getAppointments=async()=>{
       const appointmentDetails=await doctorRepository.getAllVideoAppointments()
+      if (appointmentDetails) return appointmentDetails
+    }
+    getAppointmentsCompleted=async()=>{
+      const appointmentDetails=await doctorRepository.getAllAppointmentsCompleted()
       if (appointmentDetails) return appointmentDetails
     }
     confirmAppointment=async(status:IStatusType)=>{

@@ -102,10 +102,14 @@ class DoctorRepository {
 
   async updateVideoConsultationSlot(slotData: ISlotInterface, indexToUpdate: number) {
     const slots = slotData.timeSlotsVideo
+    console.log(slotData.doctorId);
+    
     const doctorData = await Doctor.findById(slotData.doctorId)
-    if (doctorData?.AvailableSlots) {
-      doctorData.AvailableSlots[indexToUpdate].slots = slots;
+    if (doctorData?.videoConsultationSlots) {
+      doctorData.videoConsultationSlots[indexToUpdate].slots = slots;
       const updatedDoctor = await doctorData.save();
+      console.log(updatedDoctor,'baaaaackkkk');
+      
       return updatedDoctor;
     } else {
       throw new Error(`Doctor with ID ${slotData.doctorId} not found or AvailableSlots is undefined.`);
@@ -116,7 +120,7 @@ class DoctorRepository {
 
   async addNewVideoConsultationSlot(slotData: ISlotInterface) {
     const updatedSlots = await Doctor.findById(slotData?.doctorId)
-    console.log(updatedSlots);
+    console.log(updatedSlots,'addd new videoslot');
 
     if (!updatedSlots) {
       throw new Error(`Doctor with ID ${slotData?.doctorId} not found.`);
@@ -147,6 +151,14 @@ class DoctorRepository {
 
   async getAllVideoAppointments() {
     const departments = await (Appointment.find({ consultationMode: 'videocall' }).sort({ createdAt: -1 }))
+    if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
+    console.log(departments);
+    
+    return departments
+
+  }
+  async getAllAppointmentsCompleted() {
+    const departments = await (Appointment.find({ status: 'completed' }).populate('user').sort({ createdAt: -1 }))
     if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
     console.log(departments);
     
