@@ -1,12 +1,8 @@
 import getEnvVariable from "./getEnvVariable"
 getEnvVariable()
-console.log('first');
-
-console.log(process.env.PASSWORD_REFRESH,);
-
 export default {
     apiKey: process.env.apiKey,
-    mongoUrl: process.env.dbUrl,
+    MONGOURL: process.env.DBURL,
     passwordAccess: process.env.PASSWORD_ACCESS,
     passwordRefresh: process.env.PASSWORD_REFRESH,
     brevoEmail: process.env.BREVOEMAIL,
@@ -24,7 +20,7 @@ export default {
 
 module.exports = {
     apiKey: process.env.apiKey,
-    mongoUrl: process.env.dbUrl,
+    MONGOURL: process.env.DBURL,
     passwordAccess: process.env.PASSWORD_ACCESS,
     passwordRefresh: process.env.PASSWORD_REFRESH,
     brevoEmail: process.env.BREVOEMAIL,

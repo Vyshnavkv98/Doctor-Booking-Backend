@@ -1,12 +1,11 @@
 
-// import mongoose from 'mongoose';
+
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import * as middlewares from './middlewares';
-// import api from './controller';
-// import MessageResponse from './interfaces/MessageResponse';
+
 import connectDb from "./db/mongoose"
 import userRouter from "./express-router/user"
 import adminRouter from './express-router/admin'
@@ -14,8 +13,7 @@ import doctorRouter from './express-router/doctor'
 import fileRouter from './express-router/file'
 import cookieParser from 'cookie-parser';
 import nocache from 'nocache';
-// import busboy from 'connect-busboy';
-// import stripe from 'stripe';
+
 
 
 

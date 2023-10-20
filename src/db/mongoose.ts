@@ -6,7 +6,8 @@ import env from "../environment/env";
 const connectDb = async () => {
   mongoose.set("strictQuery", false);
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/myDrive1");
+    console.log(env.MONGOURL)
+    await mongoose.connect(`${env.MONGOURL}`);
     console.log("connected successfully..");
   } catch (error) {
     console.log(error);
