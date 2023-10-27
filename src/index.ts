@@ -14,7 +14,7 @@ const emailToSocketId = new Map()
 const socketIdToEmail = new Map()
 
 io.on('connection', (socket: Socket) => {
-  console.log('socket connected', socket.id);
+  console.log('socket connected');
   socket.on('Room:join', (data) => {
     const { email, room } = data
     emailToSocketId.set(email, socket.id)
@@ -51,5 +51,6 @@ io.on('connection', (socket: Socket) => {
       targetSocket.disconnect();
     }
   })
-    
+
+
 })

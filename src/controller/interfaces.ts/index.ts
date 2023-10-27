@@ -1,9 +1,10 @@
 import { userInterface } from "../../models/user"
 
 export type userAccessType = {
-    _id: string,
-    email: string,
-    password: string
+    _id?: string,
+    email?: string,
+    password?: string,
+    emailVerified?: boolean
 }
 export interface RequestTypeRefresh extends Request {
     admin?: userInterface,
@@ -12,5 +13,6 @@ export interface RequestTypeRefresh extends Request {
 
 export interface RequestType extends Request {
     admin?: userAccessType,
-    encryptedToken?: string
+    encryptedToken?: string,
+    user?:userAccessType
 }

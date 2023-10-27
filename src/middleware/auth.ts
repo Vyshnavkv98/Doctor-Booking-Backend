@@ -6,7 +6,8 @@ import { userInterface } from "../models/user";
 interface RequestType extends Request{
     user?:userInterface,
     token?:string,
-    encryptedToken?:string
+    encryptedToken?:string,
+    userId?:string
 
 }
 
@@ -25,36 +26,20 @@ type userAccessType = {
 }
 
 const auth=async(req:RequestType,res:Response,next:NextFunction)=>{
-
     try {
-        const accessToken=req.cookies["access-token"]
-        console.log(accessToken,'accesstoken from auth');
-        
-        if(!accessToken) throw new Error("No Access Token")
-        
-        const decoded = jwt.verify(accessToken, env.passwordAccess!) as jwtType;
-
-        const {user}=jwt.verify(accessToken, env.passwordAccess!) as jwtType;
-
-        // const user=decoded.user
-        console.log(user,'auth');
-        
-        if (!user) throw new Error("No User");
-        console.log('2');
-        if (user.emailVerified ) throw new Error("Email Not Verified")
-        req.user=user;
-        console.log(req.user,'from auth');
-        
-        next()  
-     
-
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+       const decoded= jwt.verify(token, 'your-jwt-secret-key') as jwtType
+            req.user=decoded?.user
+            next();
     } catch (e:any) {
         if (e.message !== "No Access Token" && 
         e.message !== "No User" &&
         e.message !== "Email Not Verified") console.log("\nAuthorization Middleware Error:", e.message);
         res.status(401).send("Error Authenticating");
     }
-
 }
 
 export default auth

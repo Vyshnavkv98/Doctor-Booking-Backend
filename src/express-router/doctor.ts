@@ -1,5 +1,6 @@
 import DoctorController from "../controller/doctor/doctor";
 import {Router} from 'express'
+import auth from '../middleware/auth'
 
 const doctorController=new DoctorController()
 const router=Router()

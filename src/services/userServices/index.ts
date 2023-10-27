@@ -188,8 +188,12 @@ class userServices {
 
         if (departmentDetails) return departmentDetails
     }
-    getAppointments=async()=>{
-        const appointmentDetails=await userRepository.getAllVideoAppointments()
+    getAppointments=async(req:any)=>{
+        const appointmentDetails=await userRepository.getAllVideoAppointments(req)
+        if (appointmentDetails) return appointmentDetails
+      }
+      getVideoAppointments=async(req:any)=>{
+        const appointmentDetails=await userRepository.getAllVideocallAppointments(req)
         if (appointmentDetails) return appointmentDetails
       }
 

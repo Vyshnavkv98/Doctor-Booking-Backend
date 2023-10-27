@@ -1,3 +1,4 @@
+import { RequestType, userAccessType } from "../controller/interfaces.ts";
 import { Appointment } from "../models/appointments";
 import { Department } from "../models/departments";
 import { Doctor } from "../models/doctorModel";
@@ -84,8 +85,22 @@ if(!videoConsult){
         if(!departments) throw new InternalServerError('internal server error for getting department data')
         return departments
     }
-    async getAllVideoAppointments() {
-        const departments = await (Appointment.find({ consultationMode: 'offline' }).sort({ createdAt: -1 }))
+    async getAllVideoAppointments(req:RequestType) {
+        const userId=req.user
+        const id=userId?._id?.toString()
+        
+        const departments = await (Appointment.find({ consultationMode: 'videocall',user:id }).populate('user').sort({ createdAt: -1 }))
+        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
+        console.log(departments,'deppppspspps');
+        
+        return departments
+    
+      }
+    async getAllVideocallAppointments(req:RequestType) {
+        const userId=req.user
+        const id=userId?._id?.toString()
+        
+        const departments = await (Appointment.find({ consultationMode: 'offline',user:id }).sort({ createdAt: -1 }))
         if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
         return departments
     

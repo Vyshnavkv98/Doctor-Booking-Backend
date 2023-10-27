@@ -322,8 +322,6 @@ class doctorController {
         }
     }
 
-    
-
 
 }
 
