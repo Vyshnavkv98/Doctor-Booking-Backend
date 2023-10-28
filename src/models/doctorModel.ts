@@ -280,4 +280,4 @@ doctorSchema.methods.getEncryptionKey = function () {
 }
 
 
-export const Doctor = mongoose.model<IDoctorModelInterface>('doctors', doctorSchema)
+export const Doctor = mongoose.model<IDoctorModelInterface>('doctor', doctorSchema)

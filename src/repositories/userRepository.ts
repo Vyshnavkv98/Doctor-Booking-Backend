@@ -100,7 +100,7 @@ if(!videoConsult){
         const userId=req.user
         const id=userId?._id?.toString()
         
-        const departments = await (Appointment.find({ consultationMode: 'offline',user:id }).sort({ createdAt: -1 }))
+        const departments = await (Appointment.find({ consultationMode: 'offline',user:id }).populate('doctor').sort({ createdAt: -1 }))
         if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
         return departments
     
