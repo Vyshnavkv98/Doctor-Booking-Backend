@@ -2,7 +2,6 @@ import { Router } from "express";
 import UserController from "../controller/user";
 import auth from "../middleware/auth"
 import authLogout from "../middleware/authLogout"
-import {Request,Response} from 'express'
 import upload from "../db/utils/s3";
 const express = require('express');
 
