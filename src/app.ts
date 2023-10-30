@@ -25,7 +25,7 @@ connectDb()
 
 
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors({ origin: '*' }))
 app.use('/webhook', express.raw({ type: 'application/json' })) 
 app.use(morgan('dev'));
 app.use(helmet());
