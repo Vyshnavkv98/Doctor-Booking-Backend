@@ -136,6 +136,10 @@ userSchema.statics.findByCreds = async (email: string, password: string) => {
 
         throw new Error("User not found")
     }
+    if (user.is_Blocked==true) {
+
+        throw new Error("Unauthorized error please contact admin")
+    }
 
     let pass = user.password
 

@@ -1,4 +1,5 @@
 import { RequestType, userAccessType } from "../controller/interfaces.ts";
+import { IPaymentInterface } from "../interfaces/doctorSlot.js";
 import { Appointment } from "../models/appointments";
 import { Department } from "../models/departments";
 import { Doctor } from "../models/doctorModel";
@@ -32,88 +33,103 @@ class UserRepository {
     async isExist(email: string) {
         const isREgister = await User.findOne({ email: email })
         console.log(isREgister);
-        
+
         return isREgister
     }
     async getDoctors() {
-        const doctors = await Doctor.find({video:true})
+        const doctors = await Doctor.find({ video: true })
         return doctors
     }
 
-    async addOfflineAppointmentData(appointmentData:IAppointmentDataType){
+    async addOfflineAppointmentData(appointmentData: IAppointmentDataType) {
 
-        const{name,email,reason,fee,mobile,date,time,userId,doctorId,doctorFee,videoConsult}=appointmentData
+        const { name, email, reason, fee, mobile, date, time, userId, doctorId, doctorFee, videoConsult } = appointmentData
         console.log(appointmentData)
-let addedAppointment
-if(!videoConsult){        
-         addedAppointment= new Appointment({
-            user:userId,
-            doctor:doctorId,
-            name,
-            email,
-            mobile,
-            fee,
-            date,
-            reason,
-            time,
-            payment:'pending',
-            consultationMode:'offline'
-        })
-    }else{
-        addedAppointment= new Appointment({
-            user:userId,
-            doctor:doctorId,
-            name,
-            email,
-            mobile,
-            fee,
-            date,
-            reason,
-            time,
-            payment:'pending',
-            consultationMode:'videocall'
-        })
-    }
+        let addedAppointment
+        if (!videoConsult) {
+            addedAppointment = new Appointment({
+                user: userId,
+                doctor: doctorId,
+                name,
+                email,
+                mobile,
+                fee,
+                date,
+                reason,
+                time,
+                payment: 'pending',
+                consultationMode: 'offline'
+            })
+        } else {
+            addedAppointment = new Appointment({
+                user: userId,
+                doctor: doctorId,
+                name,
+                email,
+                mobile,
+                fee,
+                date,
+                reason,
+                time,
+                payment: 'pending',
+                consultationMode: 'videocall'
+            })
+        }
         await addedAppointment.save()
-        if(addedAppointment) return addedAppointment
+        if (addedAppointment) return addedAppointment
         else throw new Error('Add appointment failed')
-        
+
     }
 
-    async getDepartments(){
-        const departments=await Department.find()
-        if(!departments) throw new InternalServerError('internal server error for getting department data')
+    async isBlocked(id:string){
+         const userData=await User.findById(id)
+         if (!userData) throw new InternalServerError('internal server error for getting user data')
+         return userData.is_Blocked
+    }
+
+    async getDepartments() {
+        const departments = await Department.find()
+        if (!departments) throw new InternalServerError('internal server error for getting department data')
         return departments
     }
-    async getAllVideoAppointments(req:RequestType) {
-        const userId=req.user
-        const id=userId?._id?.toString()
-        
-        const departments = await (Appointment.find({ consultationMode: 'videocall',user:id }).populate('user').sort({ createdAt: -1 }))
-        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
-        console.log(departments,'deppppspspps');
-        
-        return departments
-    
-      }
-    async getAllVideocallAppointments(req:RequestType) {
-        const userId=req.user
-        const id=userId?._id?.toString()
-        
-        const departments = await (Appointment.find({ consultationMode: 'offline',user:id }).populate('doctor').sort({ createdAt: -1 }))
-        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
-        return departments
-    
-      }
+    async getAllVideoAppointments(req: RequestType) {
+        const userId = req.user
+        const id = userId?._id?.toString()
 
-   async updateCancelAppointment(appointmentId:string){
-    const appointmentData=await Appointment.findByIdAndUpdate(appointmentId,{
-        status:'Cancelled'
-    })
-    if(appointmentData) return appointmentData
-    else throw new InternalServerError('internal server error for cancel appointment')
-   }
+        const departments = await (Appointment.find({ consultationMode: 'videocall', user: id }).populate('user').sort({ createdAt: -1 }))
+        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
+        console.log(departments, 'deppppspspps');
 
+        return departments
+
+    }
+    async getAllVideocallAppointments(req: RequestType) {
+        const userId = req.user
+        const id = userId?._id?.toString()
+
+        const departments = await (Appointment.find({ consultationMode: 'offline', user: id }).populate('doctor').sort({ createdAt: -1 }))
+        if (!departments) throw new InternalServerError('internal server error for getting Appointment data')
+        return departments
+
+    }
+
+    async updateCancelAppointment(appointmentId: string) {
+        const appointmentData = await Appointment.findByIdAndUpdate(appointmentId, {
+            status: 'Cancelled'
+        },{new:true})
+        if (appointmentData) return appointmentData
+        else throw new InternalServerError('internal server error for cancel appointment')
+    }
+
+    async changePaymentStatus(data:IPaymentInterface){
+        
+        const appointmentData = await Appointment.findByIdAndUpdate(data.id, {
+            payment: 'success'
+        },{new:true})
+        console.log(appointmentData,'from status update')
+        if (appointmentData) return appointmentData
+        else throw new InternalServerError('internal server error for cancel appointment')
+    }
 }
 
 export default UserRepository

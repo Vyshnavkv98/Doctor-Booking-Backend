@@ -44,13 +44,16 @@ export interface IDoctorModelInterface extends Document {
     offline: boolean,
     video: boolean,
 
+    updateAvailableSlots : () => void,
+    updateVideoAvailableSlots: () => Promise<void>;
     getEncryptionKey: () => Buffer | undefined,
     findByCreds: (email: string, password: string) => Promise<IDoctorModelInterface>,
     generateTempAuthToken: () => Promise<any>,
     generateEncryptionKey: () => Buffer | undefined,
     encryptToken: (tempToken: any, key: any, publicKey: any) => any;
     decryptToken: (encryptedToken: any, key: any, publicKey: any) => any;
-    generateAuthToken: (uuid: string | undefined) => Promise<{ accessToken: string, refreshToken: string }>
+    generateAuthToken: (uuid: string | undefined) => Promise<{ accessToken: string, refreshToken: string }>,
+
 
 }
 

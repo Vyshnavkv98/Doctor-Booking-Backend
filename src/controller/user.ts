@@ -237,7 +237,7 @@ class UserController {
 
             const paymentDetail = await userProvider.confirmPayment(req, res, doctorData);
 
-
+           
 
             res.status(200).json({ success: true, paymentDetail });
         } catch (e: any) {
