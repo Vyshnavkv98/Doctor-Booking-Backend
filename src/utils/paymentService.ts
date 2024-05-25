@@ -4,7 +4,8 @@ import { IPaymentInterface } from "../interfaces/doctorSlot.js";
 
 const stripe = require('stripe')('sk_test_51Np894SEixsZ4knFgXnSgfwowqNNIFKweTSrkkfd5lFH4XYuVgWNkScisVzhbOmkToUIT00km3q32Uej3EvVNSTw00YVlxh9ls');
 
-const DOMAIN = 'http://localhost:3000'
+const DOMAIN = 'https://medss.vercel.app/'
+// const DOMAIN = 'http://localhost:3000/'
 const paymentService = async ( req: Request, res: Response,doctorData: IPaymentInterface) => {
   try {
     console.log(doctorData,'from payment');
@@ -30,8 +31,8 @@ const paymentService = async ( req: Request, res: Response,doctorData: IPaymentI
         },
       ],
       mode: 'payment',
-      success_url: `${DOMAIN}/payment-success`,
-      cancel_url: `${DOMAIN}/payment-failed`,
+      success_url: `${DOMAIN}payment-success`,
+      cancel_url: `${DOMAIN}payment-failed`,
     });
 
    return session.url

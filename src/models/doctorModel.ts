@@ -5,8 +5,7 @@ import bcrypt from 'bcrypt'
 import crypto from "crypto"
 import jwt from "jsonwebtoken"
 import env from "../environment/env"
-import { timeStamp } from "console";
-import { string } from "zod";
+import cron from 'node-cron';
 
 const doctorSchema = new mongoose.Schema({
   firstName: {
@@ -70,21 +69,20 @@ const doctorSchema = new mongoose.Schema({
   Specialization: {
     type: String,
   },
-  imgUrl:{
-    type:String
+  imgUrl: {
+    type: String
   },
   isApproved: {
     type: String,
   },
   AvailableSlots: [
-   {
-    date:{
-      type:String
-    },
-    slots:{
-      type:Array
+    {
+      date: {
+        type: String,
+      },
+      slots: Array
+
     }
-   }
   ],
   isBlocked: {
     type: Boolean,
@@ -98,45 +96,45 @@ const doctorSchema = new mongoose.Schema({
   image: {
     type: String,
   },
-  AddressLine1:{
-    type:String
+  AddressLine1: {
+    type: String
   },
-  AddressLine2:{
-    type:String
+  AddressLine2: {
+    type: String
   },
   documents: {
     type: Array,
   },
   videoConsultationSlots: [
     {
-     date:{
-       type:String,
-     },
-     slots:{
-       type:Array
-     }
+      date: {
+        type: String,
+      },
+      slots: {
+        type: Array
+      }
     }
-   ],
+  ],
   token: {
     type: Array,
   },
   blockReason: {
     type: String
   },
-  offline:{
-    type:Boolean,
-    default:true
+  offline: {
+    type: Boolean,
+    default: true
   },
-  chat:{
-    type:Boolean,
-    default:false
+  chat: {
+    type: Boolean,
+    default: false
   },
-  video:{
-    type:Boolean,
-    default:false
-    
+  video: {
+    type: Boolean,
+    default: false
+
   },
-  
+
 
 }, { timestamps: true });
 
@@ -281,3 +279,104 @@ doctorSchema.methods.getEncryptionKey = function () {
 
 
 export const Doctor = mongoose.model<IDoctorModelInterface>('doctor', doctorSchema)
+
+const DoctorModel = Doctor as typeof Doctor & {
+  updateAvailableSlots: () => void;
+};
+DoctorModel.updateAvailableSlots = async function () {
+  const currentTime = new Date();
+  const model = this;
+
+  const docs = await model.find({}).exec();
+
+  docs.forEach(async (doc: any) => {
+    if(doc?.AvailableSlots.length>0){
+    doc.AvailableSlots.forEach((slot: any) => {
+
+      const slotDateParts = new Date(slot.date).toISOString().split('T')[0].split('-').map(Number);
+      const currentDateParts = currentTime.toISOString().split('T')[0].split('-').map(Number);
+
+      if (slotDateParts[0] <= currentDateParts[0] &&
+        slotDateParts[1] <= currentDateParts[1] &&
+        slotDateParts[2] < currentDateParts[2]) {
+        doc.AvailableSlots.splice(doc.AvailableSlots.indexOf(slot), 1)
+
+      }
+
+      if (new Date(slot.date).toISOString().split('T')[0].split('-').map(Number) <= currentTime.toISOString().split('T')[0].split('-').map(Number)) {
+        slot.slots = slot.slots.filter((slotTime: any) => {
+          const [hours, minutes] = slotTime.split(':');
+          const slotTimeDate = new Date();
+          slotTimeDate.setHours(parseInt(hours, 10));
+          slotTimeDate.setMinutes(parseInt(minutes, 10));
+          return slotTimeDate > currentTime;
+        });
+      }
+    });
+    try {
+      console.log(doc,'dooooc');
+      
+      await doc.save();
+    } catch (saveErr) {
+      console.error('Error while saving:', saveErr);
+    }
+  }
+  });
+  
+
+};
+
+
+
+const DoctorModels = Doctor as typeof Doctor & {
+  updateVideoAvailableSlots: () => void;
+};
+
+
+DoctorModels.updateVideoAvailableSlots = async function () {
+  const currentTime = new Date();
+  const model = this;
+
+  const docs = await model.find({}).exec();
+
+  docs.forEach(async (doc: any) => {
+    if(doc?.videoConsultationSlots.length>0){
+    doc.videoConsultationSlots.forEach((slot: any) => {
+
+      const slotDateParts = new Date(slot.date).toISOString().split('T')[0].split('-').map(Number);
+      const currentDateParts = currentTime.toISOString().split('T')[0].split('-').map(Number);
+
+      if (slotDateParts[0] <= currentDateParts[0] &&
+        slotDateParts[1] <= currentDateParts[1] &&
+        slotDateParts[2] < currentDateParts[2]) {
+        doc.videoConsultationSlots.splice(doc.videoConsultationSlots.indexOf(slot), 1)
+
+      }
+
+      if (new Date(slot.date).toISOString().split('T')[0].split('-').map(Number) <= currentTime.toISOString().split('T')[0].split('-').map(Number)) {
+        slot.slots = slot.slots.filter((slotTime: any) => {
+          const [hours, minutes] = slotTime.split(':');
+          const slotTimeDate = new Date();
+          slotTimeDate.setHours(parseInt(hours, 10));
+          slotTimeDate.setMinutes(parseInt(minutes, 10));
+          return slotTimeDate > currentTime;
+        });
+      }
+    });
+    try {
+      await doc.save();
+    } catch (saveErr) {
+      console.error('Error while saving:', saveErr);
+    }
+  }
+  });
+};
+
+
+
+
+
+cron.schedule('* * * * *', () => {
+  DoctorModel.updateAvailableSlots();
+  DoctorModels.updateVideoAvailableSlots()
+});

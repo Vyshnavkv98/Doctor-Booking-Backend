@@ -180,7 +180,12 @@ class userServices {
 
     confirmPayment = async (req: Request, res: Response, doctorData: IPaymentInterface) => {
         const response = await paymentService(req, res, doctorData)
+       if(response) {
+        const changeStatus=await userRepository.changePaymentStatus(doctorData)
+        
+       }
         return response
+
     }
 
     getDepartments = async () => {
@@ -196,7 +201,7 @@ class userServices {
         const appointmentDetails=await userRepository.getAllVideocallAppointments(req)
         if (appointmentDetails) return appointmentDetails
       }
-
+   
     cancelDoctorAppointment=async(AppointmentId:string)=>{
         const appointmentDetails=await userRepository.updateCancelAppointment(AppointmentId)
         if (appointmentDetails) return appointmentDetails

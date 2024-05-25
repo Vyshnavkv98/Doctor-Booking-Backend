@@ -5,6 +5,7 @@ import env from "../environment/env";
 
 const connectDb = async () => {
   mongoose.set("strictQuery", false);
+  
   try {
     console.log(env.MONGOURL)
     await mongoose.connect(`${env.MONGOURL}`);

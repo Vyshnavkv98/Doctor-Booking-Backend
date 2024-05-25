@@ -15,6 +15,7 @@ export interface ISlotOfflineInterface {
 export interface IPaymentInterface {
     name: string,
     RegisterFee: number,
+    id:string
 
 }
 

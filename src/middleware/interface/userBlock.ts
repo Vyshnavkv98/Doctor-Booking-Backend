@@ -28,12 +28,9 @@ type userAccessType = {
     username: string,
 }
 
-const auth=async(req:RequestType,res:Response,next:NextFunction)=>{
+const userBlock=async(req:RequestType,res:Response,next:NextFunction)=>{
     try {
-        const token = req.headers.authorization?.split(" ")[1];
-        if (!token) {
-          return res.status(401).json({ message: 'Unauthorized' });
-        }
+       
        const decoded= jwt.verify(token, 'your-jwt-secret-key') as jwtType
             req.user=decoded?.user
             const id=decoded?.user?._id as string
@@ -41,7 +38,7 @@ const auth=async(req:RequestType,res:Response,next:NextFunction)=>{
     console.log(isBlocked,'isblocked');
 
     if(isBlocked){
-       return res.status(403).send({message:' Something wrong please contact to admin'});
+        res.status(403).send({message:' Something wrong please contact to admin'});
     }
     
 
@@ -54,4 +51,4 @@ const auth=async(req:RequestType,res:Response,next:NextFunction)=>{
     }
 }
 
-export default auth
+export default userBlock
